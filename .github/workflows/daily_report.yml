@@ -1,0 +1,23 @@
+name: Daily Market Narrative Report
+
+on:
+  schedule:
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup_python@v4
+      with:
+        python-version: '3.9'
+    - run: |
+        pip install -r requirements.txt
+        python market_agent.py
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        EMAIL_SENDER: ${{ secrets.EMAIL_SENDER }}
+        EMAIL_RECEIVER: ${{ secrets.EMAIL_RECEIVER }}
